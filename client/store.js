@@ -1,9 +1,11 @@
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import loggerMiddleware from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 const middleware = applyMiddleware(loggerMiddleware, thunkMiddleware);
 import socket from './socket';
 import axios from 'axios';
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const GOT_MESSAGES_FROM_SERVER = "GOT_MESSAGES_FROM_SERVER";
 const WRITE_MESSAGE = "WRITE_MESSAGE";
@@ -90,5 +92,7 @@ export function postMessages(message) {
 
 }
 
-const store = createStore(reducer, middleware);
+const store = createStore(reducer, composeEnhancers(
+  middleware
+));
 export default store;
