@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import store, {addMessage, writeMessage} from '../store';
-import axios from 'axios';
+import store, {addMessage, writeMessage, postMessages} from '../store';
+import socket from '../socket';
 
 export default class NewMessageEntry extends Component {
 
@@ -25,12 +25,12 @@ export default class NewMessageEntry extends Component {
   submitHandler(form) {
     form.preventDefault();
     const channelId = this.props.channel;
-    const message = {content: this.state.currentMessage, channelId: channelId};
-    axios.post(`/api/messages`, message)
-    .then(response => {
-      store.dispatch(addMessage(response.data));
-    })
-    .catch(console.error);
+    const message = {content: this.state.currentMessage, channelId: channelId, name: this.state.name};
+    console.log('messageeeeeeeeeee', message);
+    console.log('name', message.name);
+    store.dispatch(postMessages(message));
+    store.dispatch(writeMessage(''));
+
   }
 
   changeHandler(input) {
